@@ -8,35 +8,36 @@ class RAM:
                 self.registers[1] = data
                 self.program_counter = 0
                 self.steps = 0
-                while self.program_counter < len(self.program)-1:
+                while self.program_counter < len(self.program):
                         self._compute_inst(self.program[self.program_counter])
                 return self.registers[0]
 
         def _compute_inst(self, inst):
                 self.steps += 1
                 if inst == None:
-                        self.program_counter += 1
                         print("PC " + ";" + str(self.program_counter))
                         print("Registers " + ";" + str(self.registers))
+                        self.program_counter += 1
+
                 elif inst[0] == 0:
+                        print("PC " + ";" + str(self.program_counter))
                         self.registers[inst[1]] += 1
-                        self.program_counter += 1
-                        print("PC " + ";" + str(self.program_counter))
                         print("Registers " + ";" + str(self.registers))
+                        self.program_counter += 1
                 elif inst[0] == 1:
-                        self.registers[inst[1]] = max(0, self.registers[inst[1]]-1)
-                        self.program_counter += 1
                         print("PC " + ";" + str(self.program_counter))
+                        self.registers[inst[1]] = max(0, self.registers[inst[1]]-1)
                         print("Registers " + ";" + str(self.registers))
+                        self.program_counter += 1
                 elif inst[0] == 2:
                         if self.registers[inst[1]] == 0:
+                                print("PC " + ";" + str(self.program_counter))
+                                print("Registers " + ";" + str(self.registers))
                                 self.program_counter = inst[2]
-                                print("PC " + ";" + str(self.program_counter))
-                                print("Registers " + ";" + str(self.registers))
                         else:
-                                self.program_counter += 1
                                 print("PC " + ";" + str(self.program_counter))
                                 print("Registers " + ";" + str(self.registers))
+                                self.program_counter += 1
 
         def _parse(self, program):
                 instructions = program.split('\n')
@@ -82,7 +83,7 @@ def main():
                 ram = RAM()
                 output = ram.compute(program, data)
                 print("Output " + ";" + str(output))
-                print("Number of steps " + ";" + str(ram.steps))
+                print("Number of steps " + ";" + str(ram.steps-1))
 
 if __name__ == '__main__':
         main()
